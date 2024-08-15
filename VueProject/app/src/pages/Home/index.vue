@@ -1,6 +1,6 @@
 <template lang="">
     <div>
-        <button>click me to increase one</button>
+        <button @click="add">click me to increase one</button>
         <span>the data:{{count}}</span>
         <button>click me to sub one</button>
         <TypeNav />
@@ -38,6 +38,11 @@ export default {
     },
     computed: {
         ...mapState(['count'])
+    },
+    methods: {
+        add(){
+            this.$store.dispatch('add')
+        }
     }
 }
 </script>
