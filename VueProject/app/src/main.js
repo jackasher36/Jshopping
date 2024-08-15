@@ -1,12 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
-import TypeNav from '@/pages/Home/TypeNav'
+import TypeNav from '@/components/TypeNav'
 import { reqCategoryList } from '@/api';
 import store from './store';
 
-console.log(reqCategoryList().then((data) => {
-  
-}));
 
 console.log(TypeNav.name);
 Vue.component(TypeNav.name,TypeNav)

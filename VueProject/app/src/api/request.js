@@ -19,7 +19,7 @@ requests.interceptors.request.use((config) => {
 })
 
 requests.interceptors.response.use((res) => {
-    console.log("hiii",res.data);
+
     nProgress.done()
     return res.data;
 },(error) => {
