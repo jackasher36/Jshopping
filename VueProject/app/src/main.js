@@ -5,7 +5,6 @@ import { reqCategoryList } from '@/api';
 import store from './store';
 
 
-console.log(TypeNav.name);
 Vue.component(TypeNav.name,TypeNav)
 
 Vue.config.productionTip = false

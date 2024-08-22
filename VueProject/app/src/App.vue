@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header></Header>
+    <Header ></Header>
     <router-view>路由组件</router-view>
     <Footer v-show="$route.meta.isShow"></Footer>
   </div>

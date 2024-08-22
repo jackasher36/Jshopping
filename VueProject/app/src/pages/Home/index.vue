@@ -1,8 +1,9 @@
 <template lang="">
     <div>
-        <button @click="add">click me to increase one</button>
+       I Love you guys
+        <!-- <button @click="add">click me to increase one</button>
         <span>the data:{{count}}</span>
-        <button>click me to sub one</button>
+        <button>click me to sub one</button> -->
         <TypeNav />
         <ListContainer/>
         <Recommend />
@@ -22,8 +23,6 @@ import Floor from '@/pages/Home/Floor'
 import Brand from '@/pages/Home/Brand'
 import { mapState } from 'vuex';
 
-console.log('Hell');
-console.log('@',Recommend);
 export default {
     name: 'Home',
     components: {

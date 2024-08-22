@@ -1,8 +1,11 @@
 <template>
 
+
+
     <!-- 商品分类导航 -->
     <div class="type-nav">
         <div class="container">
+            <!-- {{ categoryList }} -->
             <h2 class="all">全部商品分类</h2>
             <nav class="nav">
                 <a href="###">服装城</a>
@@ -14,23 +17,23 @@
                 <a href="###">有趣</a>
                 <a href="###">秒杀</a>
             </nav>
-            <div class="sort">
-                <div class="all-sort-list2">
-                    <div class="item bo">
+            <div class="sort" v-show="isShow">
+                <div class="all-sort-list2" @click="goSearch">
+                    <div class="item" v-for="(c1, index) in categoryList" :key="c1.categoryId">
                         <h3>
-                            <a href="">图书、音像、数字商品</a>
+                            <a :data-categoryName="c1.categoryName" :data-categoryId1="c1.categoryId">{{ c1.categoryName }}</a>
                         </h3>
                         <div class="item-list clearfix">
-                            <div class="subitem">
+                            <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
                                 <dl class="fore">
                                     <dt>
-                                        <a href="">电子书</a>
+                                        <a :data-categoryName="c2.categoryName1" :data-categoryId2="c2.categoryId">{{ c2.categoryName }}</a>
                                     </dt>
                                     <dd>
-                                        <em>
-                                            <a href="">婚恋/两性</a>
+                                        <em v-for="(c3, index) in c2.categoryChild"  :key="c3.categoryId">
+                                            <a :data-categoryName="c3.categoryName" :data-categoryId3="c3.categoryId"  >{{ c3.categoryName }}</a>
                                         </em>
-                                        <em>
+                                        <!-- <em>
                                             <a href="">文学</a>
                                         </em>
                                         <em>
@@ -38,13 +41,13 @@
                                         </em>
                                         <em>
                                             <a href="">畅读VIP</a>
-                                        </em>
+                                        </em> -->
                                     </dd>
                                 </dl>
                             </div>
                         </div>
                     </div>
-                    <div class="item">
+                    <!-- <div class="item">
                         <h3>
                             <a href="">家用电器</a>
                         </h3>
@@ -1686,7 +1689,7 @@
                         <h3>
                             <a href="">箱包</a>
                         </h3>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -1695,8 +1698,48 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'TypeNav',
+    data(){
+        return {
+            isShow: true
+        }
+    },
+    mounted(){
+        this.$store.dispatch('categoryList')
+        console.log(this.$router,this.$route);
+        if(this.$route.name != 'home'){
+            this.isShow = false
+        }
+    },
+    methods: {
+        goSearch(event){
+     
+            let {categoryname,categoryid1,categoryid2,categoryid3} = event.target.dataset
+            console.log(event.target.dataset);
+            let location = {name: 'search'}
+            let query = { categoryName: categoryname}
+            if(categoryname) {
+                if(categoryid1){
+                    query.category1Id = categoryid1
+                }else if(categoryid2){
+                    query.category2Id = categoryid2
+                }else{
+                    query.category3Id = categoryid3
+                }
+            }
+            location.query = query
+            this.$router.push(location)
+        }
+    },
+    computed: {
+       ...mapState({
+            categoryList: (state) => {
+                return state.home.categoryList
+            }
+        })
+    }
 }
 </script>
 
@@ -1742,6 +1785,8 @@ export default {
             z-index: 999;
 
             .all-sort-list2 {
+                height: 450px;
+                overflow: hidden;
                 .item {
                     h3 {
                         line-height: 30px;
@@ -1814,6 +1859,8 @@ export default {
                         .item-list {
                             display: block;
                         }
+
+                        background-color: skyblue;
                     }
                 }
             }
