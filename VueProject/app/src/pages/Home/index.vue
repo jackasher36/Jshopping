@@ -1,6 +1,5 @@
 <template lang="">
     <div>
-       I Love you guys
         <!-- <button @click="add">click me to increase one</button>
         <span>the data:{{count}}</span>
         <button>click me to sub one</button> -->

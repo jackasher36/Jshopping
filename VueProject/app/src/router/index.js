@@ -42,6 +42,7 @@ VueRouter.prototype.replace = function(location, resolve, reject){
 export default new VueRouter ({
     routes:[
         {
+            name:'home',
             path:'/home',
             component:Home,
             meta: {

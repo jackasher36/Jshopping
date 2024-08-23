@@ -4,7 +4,7 @@
 
     <!-- 商品分类导航 -->
     <div class="type-nav">
-        <div class="container">
+        <div class="container" @mouseenter="enterShow" @mouseleave="leaveShow">
             <!-- {{ categoryList }} -->
             <h2 class="all">全部商品分类</h2>
             <nav class="nav">
@@ -17,23 +17,30 @@
                 <a href="###">有趣</a>
                 <a href="###">秒杀</a>
             </nav>
-            <div class="sort" v-show="isShow">
-                <div class="all-sort-list2" @click="goSearch">
-                    <div class="item" v-for="(c1, index) in categoryList" :key="c1.categoryId">
-                        <h3>
-                            <a :data-categoryName="c1.categoryName" :data-categoryId1="c1.categoryId">{{ c1.categoryName }}</a>
-                        </h3>
-                        <div class="item-list clearfix">
-                            <div class="subitem" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
-                                <dl class="fore">
-                                    <dt>
-                                        <a :data-categoryName="c2.categoryName1" :data-categoryId2="c2.categoryId">{{ c2.categoryName }}</a>
-                                    </dt>
-                                    <dd>
-                                        <em v-for="(c3, index) in c2.categoryChild"  :key="c3.categoryId">
-                                            <a :data-categoryName="c3.categoryName" :data-categoryId3="c3.categoryId"  >{{ c3.categoryName }}</a>
-                                        </em>
-                                        <!-- <em>
+            <transition name="sort">
+                <div class="sort" v-show="isShow">
+                    <div class="all-sort-list2" @click="goSearch">
+                        <div class="item" v-for="(c1, index) in categoryList" :key="c1.categoryId">
+                            <h3>
+                                <a :data-categoryName="c1.categoryName" :data-categoryId1="c1.categoryId">{{
+                                    c1.categoryName
+                                    }}</a>
+                            </h3>
+                            <div class="item-list clearfix">
+                                <div class="subitem" v-for="(c2, index) in c1.categoryChild" :key="c2.categoryId">
+                                    <dl class="fore">
+                                        <dt>
+                                            <a :data-categoryName="c2.categoryName1"
+                                                :data-categoryId2="c2.categoryId">{{
+                                                    c2.categoryName }}</a>
+                                        </dt>
+                                        <dd>
+                                            <em v-for="(c3, index) in c2.categoryChild" :key="c3.categoryId">
+                                                <a :data-categoryName="c3.categoryName"
+                                                    :data-categoryId3="c3.categoryId">{{
+                                                        c3.categoryName }}</a>
+                                            </em>
+                                            <!-- <em>
                                             <a href="">文学</a>
                                         </em>
                                         <em>
@@ -42,12 +49,12 @@
                                         <em>
                                             <a href="">畅读VIP</a>
                                         </em> -->
-                                    </dd>
-                                </dl>
+                                        </dd>
+                                    </dl>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- <div class="item">
+                        <!-- <div class="item">
                         <h3>
                             <a href="">家用电器</a>
                         </h3>
@@ -1690,8 +1697,9 @@
                             <a href="">箱包</a>
                         </h3>
                     </div> -->
+                    </div>
                 </div>
-            </div>
+            </transition>
         </div>
     </div>
 
@@ -1701,40 +1709,57 @@
 import { mapState } from 'vuex';
 export default {
     name: 'TypeNav',
-    data(){
+    data() {
         return {
             isShow: true
         }
     },
-    mounted(){
+    mounted() {
         this.$store.dispatch('categoryList')
-        console.log(this.$router,this.$route);
-        if(this.$route.name != 'home'){
+        if (this.$route.name != 'home') {
+
             this.isShow = false
         }
     },
     methods: {
-        goSearch(event){
-     
-            let {categoryname,categoryid1,categoryid2,categoryid3} = event.target.dataset
+        leaveShow() {
+
+            if (this.$route.name != 'home') {
+                this.isShow = false
+            }
+
+        },
+        enterShow() {
+            if (this.$route.name != 'home') {
+                this.isShow = true
+            }
+        },
+        goSearch(event) {
+
+            let { categoryname, categoryid1, categoryid2, categoryid3 } = event.target.dataset
             console.log(event.target.dataset);
-            let location = {name: 'search'}
-            let query = { categoryName: categoryname}
-            if(categoryname) {
-                if(categoryid1){
+            let location = { name: 'search' }
+            let query = { categoryName: categoryname }
+            if (categoryname) {
+                if (categoryid1) {
                     query.category1Id = categoryid1
-                }else if(categoryid2){
+                } else if (categoryid2) {
                     query.category2Id = categoryid2
-                }else{
+                } else {
                     query.category3Id = categoryid3
                 }
             }
-            location.query = query
-            this.$router.push(location)
+
+            if(this.$route.params){
+                location.params = this.$route.params
+                location.query = query
+                this.$router.push(location)
+            }
+       
         }
     },
     computed: {
-       ...mapState({
+        ...mapState({
             categoryList: (state) => {
                 return state.home.categoryList
             }
@@ -1784,9 +1809,11 @@ export default {
             background: #fafafa;
             z-index: 999;
 
+
             .all-sort-list2 {
                 height: 450px;
                 overflow: hidden;
+
                 .item {
                     h3 {
                         line-height: 30px;
@@ -1864,6 +1891,18 @@ export default {
                     }
                 }
             }
+        }
+
+        .sort-enter {
+            height: 0;
+        }
+
+        .sort-enter-to {
+            height: 461px;
+        }
+
+        .sort-enter-active {
+            transition: all .5s linear
         }
     }
 }
